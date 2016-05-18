@@ -11,6 +11,14 @@
 ;; -------------------------
 ;; Views
 (def api-response (reagent/atom "No response, yet!"))
+
+(defn api-response-handler
+  [response]
+  (swap! api-response (fn [_] (str "HTTP status: " (:status response))))
+  (prn response)
+  (.log js/console (str response))
+)
+
 (defn home-page []
   [:div
    [:h2 "Adapted drugs searcher"]
@@ -26,7 +34,7 @@
        [:input
             {:type "button"
              :value "Search"
-             :on-click #(swap! api-response (api-client/adapted-drugs #{} (fn [r] (println r))))}]]
+             :on-click #((api-client/adapted-drugs #{} api-response-handler))}]]
      ]
     ]]
     [:div
