@@ -2,10 +2,15 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
             [secretary.core :as secretary :include-macros true]
-            [accountant.core :as accountant]))
+            [accountant.core :as accountant]
+            [adapted-drugs-searcher.api-client :as api-client]))
+
+
+(enable-console-print!)
 
 ;; -------------------------
 ;; Views
+(def api-response (reagent/atom "No response, yet!"))
 (defn home-page []
   [:div
    [:h2 "Adapted drugs searcher"]
@@ -17,9 +22,16 @@
       [:text "output:"] [:br]
       [:input {:type "radio" :name "product" :value "PRODUCT"}] [:text "product"]  [:br]
       [:input {:type "radio" :name "package" :value "PACKAGE"}] [:text "package"]
-      [:li [:input {:type "submit" :value "Search"}]]
+      [:li
+       [:input
+            {:type "button"
+             :value "Search"
+             :on-click #(swap! api-response (api-client/adapted-drugs #{} (fn [r] (println r))))}]]
      ]
     ]]
+    [:div
+      [:text "API response: " @api-response ]
+    ]
    ]
   )
 
