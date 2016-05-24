@@ -5,7 +5,7 @@
 
 (defn adapted-drugs [form-params handler]
   (go (handler (<! (http/post
-                     "http://master.dockersw.vidal.net/rest/api/adapted-drugs"
+                     "http://localhost:8088/rest/api/adapted-drugs"
                      {
                       :content-type "text/xml"
                       :form-params  {
